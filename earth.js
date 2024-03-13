@@ -59,7 +59,6 @@ document.body.appendChild(renderer.domElement);
 
 // Animation.
 function animation(time) {
-    // earthMesh.rotation.x = time / 5000;
     earthMesh.rotation.y = time / 8000;
     lightMesh.rotation.y = time / 8000;
     // cloudMesh.rotation.y = time / 8000;
@@ -82,5 +81,7 @@ earthMapLights:
 1024 x 512 color image. Very similar to the night lights map as published by NASA on their Blue Marble Page. I took their 30000 x 15000 black and white city lights map, and adapted it with a color table to a colorized version of my earth color map. This comes in 2k, 4k, and 10k versions in color, as opposed to the maximum 2k size of the NASA version of this map (higher resolution versions are available on the paid page only because of their size). Be sure to have a look at the tutorials page for a special rendering tip for using this map.
 
 
-
+TODO: add the cloud mesh and other planets. 
+TODO: Allow the user to navigate through the solar system and zoom in and expand on any planet. 
+TODO: Display CSS properties if the FOV of the camera is within certain parameters.
 */
