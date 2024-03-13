@@ -7,10 +7,10 @@ const height = window.innerHeight;
 // Setup a scene, camera, and basic object props.
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, width / height, 0.01, 1000);
-camera.position.z = 4;
+camera.position.z = 3;
 
 // Add a light to the scene.
-const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
 directionalLight.position.set(-4, 0.25, 2.5);
 scene.add(directionalLight);
 
@@ -25,15 +25,27 @@ scene.add(earthGroup);
 earthGroup.add(earthMesh);
 
 // Add the city lights as a blended mesh.
-const lightMaterial = new THREE.MeshBasicMaterial( {map: textureLoad.load('assets/earthMapLights.jpg'), blending: THREE.AdditiveBlending});
+const lightMaterial = new THREE.MeshBasicMaterial( {
+    map: textureLoad.load('assets/earthMapLights.jpg'), 
+    blending: THREE.CustomBlending,
+    blendEquation: THREE.AddEquation,
+    blendSrc: THREE.SrcColorFactor,
+    blendDst: THREE.OneFactor,
+    });
 const lightMesh = new THREE.Mesh(geometry, lightMaterial);
 earthGroup.add(lightMesh);
 
 // Add the clouds as a blended mesh.
-// const cloudMaterial = new THREE.MeshBasicMaterial( {map: textureLoad.load('assets/earthMapClouds.jpg'), blending: THREE.AdditiveBlending});
-// const cloudMesh = new THREE.Mesh(geometry, cloudMaterial);
-// cloudMesh.scale.setScalar(1.003);
-// earthGroup.add(cloudMesh);
+const cloudMaterial = new THREE.MeshBasicMaterial( {
+    map: textureLoad.load('assets/earthMapClouds.jpg'),
+    blending: THREE.CustomBlending,
+    blendEquation: THREE.AddEquation,
+    blendSrc: THREE.DstColorFactor,
+    blendDst: THREE.OneFactor,
+    });
+const cloudMesh = new THREE.Mesh(geometry, cloudMaterial);
+cloudMesh.scale.setScalar(1.003);
+earthGroup.add(cloudMesh);
 
 // Add stars.
 const starsCoords = [];
@@ -61,11 +73,10 @@ document.body.appendChild(renderer.domElement);
 function animation(time) {
     earthMesh.rotation.y = time / 8000;
     lightMesh.rotation.y = time / 8000;
-    // cloudMesh.rotation.y = time / 8000;
+    cloudMesh.rotation.y = time / 8000;
 
     renderer.render(scene, camera);
 }
-
 
 
 /*
