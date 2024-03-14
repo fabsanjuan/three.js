@@ -1,4 +1,8 @@
 import * as THREE from 'three';
+import vertexShader from './shaders/vertex.glsl';
+import fragmentShader from './shaders/fragment.glsl';
+
+console.log(vertexShader, fragmentShader);
 
 // Set the app width and height to window dimensions.
 const width = window.innerWidth;
@@ -7,7 +11,7 @@ const height = window.innerHeight;
 // Setup a scene, camera, and basic object props.
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, width / height, 0.01, 1000);
-camera.position.z = 3;
+camera.position.z = 4;
 
 // Add a light to the scene.
 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
@@ -23,6 +27,17 @@ const material = new THREE.MeshStandardMaterial( {map: textureLoad.load('assets/
 const earthMesh = new THREE.Mesh(geometry, material);
 scene.add(earthGroup);
 earthGroup.add(earthMesh);
+
+// Add the fresnel texture to the earth.
+const glowMaterial = new THREE.ShaderMaterial({
+    vertexShader,  // vertexShader: vertexShader,
+    fragmentShader,  // fragmentShader: fragmentShader,
+    blending: THREE.AdditiveBlending,
+    side: THREE.BackSide,
+})
+const glowMesh = new THREE.Mesh(geometry, glowMaterial);
+glowMesh.scale.set(1.1, 1.1, 1.1);
+earthGroup.add(glowMesh);
 
 // Add the city lights as a blended mesh.
 const lightMaterial = new THREE.MeshBasicMaterial( {
@@ -64,7 +79,8 @@ const starsMaterial = new THREE.PointsMaterial( { color: 0xaaaaaa } );
 const stars = new THREE.Points( starsGeometry, starsMaterial );
 scene.add( stars );
 
-const renderer = new THREE.WebGLRenderer( {antialias: true} );
+// Render the scene
+const renderer = new THREE.WebGLRenderer( {antialias: true} ); // Antialias sharpens the ragged edges of the objects.
 renderer.setSize(width, height);
 renderer.setAnimationLoop(animation);
 document.body.appendChild(renderer.domElement);
@@ -74,6 +90,7 @@ function animation(time) {
     earthMesh.rotation.y = time / 8000;
     lightMesh.rotation.y = time / 8000;
     cloudMesh.rotation.y = time / 8000;
+    glowMesh.rotation.y = time / 8000;
 
     renderer.render(scene, camera);
 }
