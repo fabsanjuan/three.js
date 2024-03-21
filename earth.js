@@ -19,9 +19,10 @@ directionalLight.position.set(-4, 0.25, 2.5);
 scene.add(directionalLight);
 
 // 3D Objects are made of vertices and edges (geometry), type of material, a mesh which combines the two.
+const textureLoad = new THREE.TextureLoader();
+
 const earthGroup = new THREE.Group();
 earthGroup.rotation.z = (-23.4 * Math.PI) / 180;
-const textureLoad = new THREE.TextureLoader();
 const geometry = new THREE.IcosahedronGeometry(1, 6);
 const material = new THREE.MeshStandardMaterial( {map: textureLoad.load('assets/earthMapBumped.jpg')} );
 const earthMesh = new THREE.Mesh(geometry, material);
